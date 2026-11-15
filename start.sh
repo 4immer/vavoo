@@ -1,33 +1,28 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 echo "=========================================="
-echo "    vavoo Automatisches Installationsprogramm"
+echo "   VAVOO / VXPARSER INSTALLATION STARTET  "
 echo "=========================================="
 
-# 1. Systempakete und Build-Tools (Rust, Clang usw.) aktualisieren und installieren
-echo "[+] Systempakete und Build-Tools (Rust, Clang usw.) werden aktualisiert und installiert..."
+echo "[+] Systempakete werden aktualisiert und installiert..."
 pkg update -y && pkg upgrade -y
 pkg install -y python python-pip git curl libxml2 libxslt rust clang build-essential
 
-# 2. Python-Umgebung (venv) im Ordner 'vavoo' erstellen
-echo "[+] Python-Umgebung (venv) wird im Ordner 'vavoo' vorbereitet..."
+echo "[+] Virtuelle Umgebung (vavoo) wird erstellt..."
 python -m venv ~/vavoo
 source ~/vavoo/bin/activate
 
-# 3. Pip-Aktualisierung und Installation aus dem offiziellen Mastaaa1987/vxparser-Repository
-echo "[+] vxparser wird aus dem GitHub-Repository installiert..."
-pip install --upgrade pip
+echo "[+] Pip wird aktualisiert und vxparser wird installiert..."
+pip install --upgrade pip wheel setuptools
 pip install git+https://github.com/Mastaaa1987/vxparser.git
 
-# 4. .bashrc-Einstellung für den automatischen Start beim Öffnen von Termux
 echo "[+] Automatischer Start wird konfiguriert..."
-if ! grep -q "vavoo/bin/activate" ~/.bashrc; then
-    echo "" >> ~/.bashrc
-    echo "# vavoo Automatischer Start" >> ~/.bashrc
+touch ~/.bashrc
+if ! grep -q "source ~/vavoo/bin/activate" ~/.bashrc; then
     echo "source ~/vavoo/bin/activate && vxparser" >> ~/.bashrc
 fi
 
 echo "=========================================="
-echo "    INSTALLATION ERFOLGREICH ABGESCHLOSSEN! "
+echo "  INSTALLATION ERFOLGREICH ABGESCHLOSSEN! "
 echo "=========================================="
 echo "vxparser startet automatisch, sobald Sie Termux neu starten."
